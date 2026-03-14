@@ -11,6 +11,7 @@ namespace miniEcommerceApi.Data.Configurations
             builder.ToTable("Categories");
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Name).IsRequired().HasMaxLength(100);
+            builder.Property(c => c.IsActive).IsRequired();
         }
     }
 }
