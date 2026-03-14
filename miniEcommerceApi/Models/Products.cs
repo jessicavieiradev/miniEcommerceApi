@@ -11,5 +11,17 @@
         public Guid CategoryId { get; set; }
         public Categories Category { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public Products(string name, string description, decimal price, int stock, string imageUrl, Guid categoryId)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Description = description;
+            Price = price;
+            Stock = stock;
+            ImageUrl = imageUrl;
+            CategoryId = categoryId;
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }
