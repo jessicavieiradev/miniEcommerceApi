@@ -12,6 +12,8 @@
         public Categories Category { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        public Products(){ }
+
         public Products(string name, string description, decimal price, int stock, string imageUrl, Guid categoryId)
         {
             Id = Guid.NewGuid();
