@@ -14,6 +14,27 @@ namespace miniEcommerceApi.Services
         {
             _context = context;
         }
+
+        public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()
+        {
+            var categories = await _context.Categories
+                .Where(c => c.IsActive)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+
+
+            return categories.Select(c => new CategoryResponse(c.Id, c.Name, c.IsActive));
+        }
+        public async Task<CategoryResponse> GetCategoryByIdAsync(Guid id)
+        {
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
+            if (category == null)
+            {
+                throw new KeyNotFoundException("Categoria não encontrada.");
+            }
+            return new CategoryResponse(category.Id, category.Name, category.IsActive);
+        }
         public async Task<CategoryResponse> CreateCategoryAsync(CreateCategoryRequest dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
@@ -33,39 +54,6 @@ namespace miniEcommerceApi.Services
 
             return new CategoryResponse(category.Id,category.Name,category.IsActive);
         }
-
-        public async Task DeleteCategoryAsync(Guid id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                throw new KeyNotFoundException("Categoria não encontrada.");
-            }
-            category.Deactivate();
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<CategoryResponse>> GetAllCategoriesAsync()
-        {
-            var categories = await _context.Categories
-                .Where(c => c.IsActive)
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-
-            return categories.Select(c => new CategoryResponse(c.Id, c.Name, c.IsActive));
-        }
-
-        public async Task<CategoryResponse> GetCategoryByIdAsync(Guid id)
-        {
-            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
-            if (category == null)
-            {
-                throw new KeyNotFoundException("Categoria não encontrada.");
-            }
-            return new CategoryResponse(category.Id, category.Name, category.IsActive);
-        }
-
         public async  Task<CategoryResponse> UpdateCategoryAsync(Guid id, UpdateCategoryRequest dto)
         {
             var existingCategory = await _context.Categories.FindAsync(id);
@@ -78,6 +66,17 @@ namespace miniEcommerceApi.Services
             await _context.SaveChangesAsync();
 
             return new CategoryResponse(existingCategory.Id, existingCategory.Name, existingCategory.IsActive);
+        }
+        public async Task DeleteCategoryAsync(Guid id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                throw new KeyNotFoundException("Categoria não encontrada.");
+            }
+            category.Deactivate();
+
+            await _context.SaveChangesAsync();
         }
     }
 }
