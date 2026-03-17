@@ -14,6 +14,10 @@ namespace miniEcommerceApi.Data.Configurations
             builder.Property(x => x.LastName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Phone).IsRequired().HasMaxLength(20);
             builder.Property(x => x.Cpf).IsRequired().HasMaxLength(20);
+            builder.HasOne(x => x.User)
+                   .WithOne()
+                   .HasForeignKey<Costumers>(x => x.UserId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
