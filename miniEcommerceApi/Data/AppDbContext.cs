@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using miniEcommerceApi.Models;
 
 namespace miniEcommerceApi.Data
 {
-    public sealed class AppDbContext : DbContext
+    public sealed class AppDbContext : IdentityDbContext<Users, IdentityRole<Guid>,Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Adresses> Adresses { get; set; }
