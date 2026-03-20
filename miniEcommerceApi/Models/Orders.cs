@@ -7,7 +7,7 @@ namespace miniEcommerceApi.Models
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-        public OrderStatus Status { get; set; } // Assumindo que você criou esse enum
+        public OrderStatus Status { get; set; }
         public decimal TotalAmount { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string ZipCode { get; set; } = string.Empty;
@@ -17,6 +17,7 @@ namespace miniEcommerceApi.Models
         public string City { get; set; } = string.Empty;
         public string State { get; set; } = string.Empty;
         public string? Notes { get; set; }
-        public Costumers Customer { get; set; } = null!;
+        public Customers Customer { get; set; } = null!;
+        public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
     }
 }
