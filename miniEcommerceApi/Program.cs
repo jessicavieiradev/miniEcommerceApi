@@ -116,6 +116,7 @@ using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<ProductsSeeder>();
     await seeder.SeedAsync();
+    await AdminSeeder.SeedAsync(scope.ServiceProvider, builder.Configuration);
 }
 
 if (app.Environment.IsDevelopment())
