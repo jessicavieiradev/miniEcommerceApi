@@ -16,6 +16,7 @@ namespace miniEcommerceApi.Data.Configurations
             builder.Property(x=>x.Stock).IsRequired();
             builder.Property(x=>x.ImageUrl).HasMaxLength(200);
             builder.Property(x=>x.CreatedAt).HasDefaultValueSql("GETDATE()").ValueGeneratedOnAdd();
+            builder.Property(x => x.IsActive).IsRequired();
             builder.HasOne(x=>x.Category)
                 .WithMany()
                 .HasForeignKey(x=>x.CategoryId)
