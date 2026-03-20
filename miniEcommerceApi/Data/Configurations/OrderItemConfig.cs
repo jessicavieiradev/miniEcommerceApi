@@ -13,7 +13,7 @@ namespace miniEcommerceApi.Data.Configurations
             builder.Property(x => x.Quantity).IsRequired();
             builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");
             builder.HasOne(x => x.Order)
-                   .WithMany()
+                   .WithMany(o=>o.Items)
                    .HasForeignKey(x => x.OrderId)
                    .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(x => x.Product)
