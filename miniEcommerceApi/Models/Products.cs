@@ -11,10 +11,11 @@
         public Guid CategoryId { get; set; }
         public Categories Category { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public bool IsActive { get; set; }
 
         public Products(){ }
 
-        public Products(string name, string description, decimal price, int stock, string imageUrl, Guid categoryId)
+        public Products(string name, string description, decimal price, int stock, string imageUrl, Guid categoryId, bool IsActive)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -24,6 +25,7 @@
             ImageUrl = imageUrl;
             CategoryId = categoryId;
             CreatedAt = DateTime.UtcNow;
+            IsActive = true;
         }
     }
 }
