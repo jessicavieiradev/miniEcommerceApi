@@ -3,8 +3,8 @@
 namespace miniEcommerceApi.DTOs.CategoriesDTO.Request
 {
     public record CreateCategoryRequest(
-        [Required(ErrorMessage = "O Name é obrigatório.")]
-        [MinLength(3,ErrorMessage = "Minimo de 3 caracteres.")] 
+        [Required(ErrorMessage = "Name is required.")]
+        [MinLength(3,ErrorMessage = "Minimum of 3 characters.")] 
         [MaxLength(100)] 
         string Name
     );
