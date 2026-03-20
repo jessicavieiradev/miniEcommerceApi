@@ -55,7 +55,13 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        )
+    )
 );
 
 builder.Services.AddIdentity<Users, IdentityRole<Guid>>()
@@ -109,13 +115,32 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.UseCors("AllowAll");
 
-
-await app.CreateRoles();
-
 using (var scope = app.Services.CreateScope())
 {
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    var retries = 5;
+    while (retries > 0)
+    {
+        try
+        {
+            await db.Database.MigrateAsync();
+            break;
+        }
+        catch (Exception)
+        {
+            retries--;
+            if (retries == 0) throw;
+            await Task.Delay(5000);
+        }
+    }
+
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+    await RolesSeeder.CreateRoles(roleManager);
+
     var seeder = scope.ServiceProvider.GetRequiredService<ProductsSeeder>();
     await seeder.SeedAsync();
+
     await AdminSeeder.SeedAsync(scope.ServiceProvider, builder.Configuration);
 }
 
