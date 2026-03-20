@@ -4,11 +4,11 @@ namespace miniEcommerceApi.DTOs.AuthDTO.Request
 {
     public class LoginRequestDTO
     {
-        [Required(ErrorMessage = "Email é obrigatório")]
-        [EmailAddress(ErrorMessage = "Email inválido")]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid Email")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Senha é obrigatória")]
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
 }
