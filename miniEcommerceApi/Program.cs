@@ -89,6 +89,15 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 
+builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddScoped<IProductsService, ProductService>();
+
+builder.Services.AddScoped<IAddressesService, AddressesService>();
+
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+
 builder.Services.AddControllers();
 
 builder.Services.AddHttpClient();
