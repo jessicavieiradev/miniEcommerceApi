@@ -35,7 +35,7 @@ namespace miniEcommerceApi.Data.Seeders
                         await _context.SaveChangesAsync();
                     }
                     var primeiraImagem = item.Images.FirstOrDefault() ?? "sem-imagem.jpg";
-                    var product = new Products(item.Title, item.Description, (decimal)item.Price, item.Stock, primeiraImagem, category.Id);
+                    var product = new Products(item.Title, item.Description, (decimal)item.Price, item.Stock, primeiraImagem, category.Id, true);
                     _context.Products.Add(product);
                 }
                 await _context.SaveChangesAsync();
