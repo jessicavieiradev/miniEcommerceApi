@@ -15,7 +15,7 @@
         public void UpdateName(string newName)
         {
             if (string.IsNullOrWhiteSpace(newName))
-                throw new ArgumentException("O nome da categoria não pode ser vazio.");
+                throw new ArgumentException("O Name da categoria não pode ser vazio.");
             Name = newName;
         }
         public void Deactivate()

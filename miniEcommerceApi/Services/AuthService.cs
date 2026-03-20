@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using miniEcommerceApi.Data;
 using miniEcommerceApi.DTOs.AuthDTO.Request;
-using miniEcommerceApi.DTOs.CostumersDTO.Request;
-using miniEcommerceApi.DTOs.CostumersDTO.Response;
+using miniEcommerceApi.DTOs.CustomersDTO.Request;
+using miniEcommerceApi.DTOs.CustomersDTO.Response;
 using miniEcommerceApi.DTOs.Shared;
 using miniEcommerceApi.Enums;
 using miniEcommerceApi.Interfaces;
@@ -24,43 +24,43 @@ namespace miniEcommerceApi.Services
             _tokenService = tokenService;
         }
 
-        public async Task<IEnumerable<CostumerResponse>> GetAllCostumers()
+        public async Task<IEnumerable<CustomerResponse>> GetAllCustomers()
         {
-            IEnumerable<Costumers> costumers = await _context.Customers.Include(c => c.User).ToListAsync();
-            if (!costumers.Any())
+            IEnumerable<Customers> Customers = await _context.Customers.Include(c => c.User).ToListAsync();
+            if (!Customers.Any())
             {
-                return Enumerable.Empty<CostumerResponse>();
+                return Enumerable.Empty<CustomerResponse>();
             }
-            return costumers.Select(c => new CostumerResponse
+            return Customers.Select(c => new CustomerResponse
             {
                 Id = c.Id,
-                Nome = c.FirstName,
-                Sobrenome = c.LastName,
+                Name = c.FirstName,
+                LastName = c.LastName,
                 Cpf = c.Cpf,
-                Telefone = c.Phone,
+                Phone = c.Phone,
                 Email = c.User.Email,
                 Username = c.User.UserName
             });
         }
-        public async Task<CostumerResponse> GetCostumerById(Guid id)
+        public async Task<CustomerResponse> GetCustomerById(Guid id)
         {
-            var costumer = await _context.Customers.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == id);
-            if (costumer == null)
+            var Customer = await _context.Customers.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == id);
+            if (Customer == null)
             {
-                return null;
+                throw new KeyNotFoundException("Customer not found");
             }
-            return new CostumerResponse
+            return new CustomerResponse
             {
-                Id = costumer.Id,
-                Nome = costumer.FirstName,
-                Sobrenome = costumer.LastName,
-                Cpf = costumer.Cpf,
-                Telefone = costumer.Phone,
-                Email = costumer.User.Email,
-                Username = costumer.User.UserName
+                Id = Customer.Id,
+                Name = Customer.FirstName,
+                LastName = Customer.LastName,
+                Cpf = Customer.Cpf,
+                Phone = Customer.Phone,
+                Email = Customer.User.Email,
+                Username = Customer.User.UserName
             };
         }
-        public async Task<AuthResponse> CreateCostumer(CreateCostumerRequest dto)
+        public async Task<AuthResponse> CreateCustomer(CreateCustomerRequest dto)
         {
             var existingCpf = await _context.Customers
                 .FirstOrDefaultAsync(c => c.Cpf == dto.Cpf);
@@ -80,57 +80,57 @@ namespace miniEcommerceApi.Services
 
             await _userManager.AddToRoleAsync(user, UserRoles.Customer);
 
-            var costumer = new Costumers
+            var Customer = new Customers
             {
                 UserId = user.Id,
-                FirstName = dto.Nome,
-                LastName = dto.Sobrenome,
+                FirstName = dto.Name,
+                LastName = dto.LastName,
                 Cpf = dto.Cpf,
-                Phone = dto.Telefone
+                Phone = dto.Phone
             };
 
             try
             {
-                _context.Customers.Add(costumer);
+                _context.Customers.Add(Customer);
                 await _context.SaveChangesAsync();
-                var token = await _tokenService.GenerateToken(user, costumer.FirstName);
+                var token = await _tokenService.GenerateToken(user, Customer.FirstName);
 
                 return new AuthResponse
                 {
                     Token = token,
-                    Nome = costumer.FirstName,
+                    Name = Customer.FirstName,
                     Email = user.Email
                 };
             }
             catch (Exception)
             {
                 await _userManager.DeleteAsync(user);
-                throw new InvalidOperationException("Error creating costumer");
+                throw new InvalidOperationException("Error creating Customer");
             }
         }
-        public async Task UpdateCostumer(Guid id, UpdateCostumerRequest dto)
+        public async Task UpdateCustomer(Guid id, UpdateCustomerRequest dto)
         {
-            var costumer = await _context.Customers
+            var Customer = await _context.Customers
         .Include(c => c.User)
         .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (costumer == null)
-                throw new InvalidOperationException("Costumer not found");
+            if (Customer == null)
+                throw new InvalidOperationException("Customer not found");
 
-            if (dto.Nome != null) costumer.FirstName = dto.Nome;
-            if (dto.Sobrenome != null) costumer.LastName = dto.Sobrenome;
-            if (dto.Cpf != null) costumer.Cpf = dto.Cpf;
-            if (dto.Telefone != null) costumer.Phone = dto.Telefone;
+            if (dto.Name != null) Customer.FirstName = dto.Name;
+            if (dto.LastName != null) Customer.LastName = dto.LastName;
+            if (dto.Cpf != null) Customer.Cpf = dto.Cpf;
+            if (dto.Phone != null) Customer.Phone = dto.Phone;
 
-            if (dto.Email != null) costumer.User.Email = dto.Email;
-            if (dto.Username != null) costumer.User.UserName = dto.Username;
+            if (dto.Email != null) Customer.User.Email = dto.Email;
+            if (dto.Username != null) Customer.User.UserName = dto.Username;
             if (dto.Password != null)
             {
-                var token = await _userManager.GeneratePasswordResetTokenAsync(costumer.User);
-                await _userManager.ResetPasswordAsync(costumer.User, token, dto.Password);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(Customer.User);
+                await _userManager.ResetPasswordAsync(Customer.User, token, dto.Password);
             }
 
-            _context.Customers.Update(costumer);
+            _context.Customers.Update(Customer);
             await _context.SaveChangesAsync();
         }
         public async Task DeleteUser(Guid id)
@@ -138,7 +138,7 @@ namespace miniEcommerceApi.Services
             var user = await _userManager.FindByIdAsync(id.ToString());
 
             if (user == null)
-                throw new InvalidOperationException("Costumer not found");
+                throw new InvalidOperationException("Customer not found");
 
             user.IsActive = false;
             await _userManager.UpdateAsync(user);
@@ -156,12 +156,12 @@ namespace miniEcommerceApi.Services
             if (!passwordValid)
                 throw new InvalidOperationException("Invalid credentials");
 
-            var costumer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == existingUser.Id);
+            var Customer = await _context.Customers.FirstOrDefaultAsync(c => c.UserId == existingUser.Id);
 
             return new AuthResponse
             {
                 Token = await _tokenService.GenerateToken(existingUser, existingUser.UserName),
-                Nome = costumer.FirstName ?? existingUser.UserName,
+                Name = Customer.FirstName ?? existingUser.UserName,
                 Email = existingUser.Email
             };
 

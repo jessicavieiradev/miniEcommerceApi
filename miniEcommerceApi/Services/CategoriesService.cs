@@ -39,12 +39,12 @@ namespace miniEcommerceApi.Services
         {
             if (string.IsNullOrWhiteSpace(dto.Name))
             {
-                throw new ArgumentException("O nome da categoria não pode ser vazio.");
+                throw new ArgumentException("O Name da categoria não pode ser vazio.");
             }
             var existingCategory = await _context.Categories.AnyAsync(c => c.Name == dto.Name);
             if (existingCategory)
             {
-                throw new InvalidOperationException("Uma categoria com este nome já existe.");
+                throw new InvalidOperationException("Uma categoria com este Name já existe.");
             }
 
             var category = new Categories(dto.Name);
