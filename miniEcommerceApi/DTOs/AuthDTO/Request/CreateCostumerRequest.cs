@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace miniEcommerceApi.DTOs.CostumersDTO.Request
+namespace miniEcommerceApi.DTOs.CustomersDTO.Request
 {
-    public class CreateCostumerRequest
+    public class CreateCustomerRequest
     {
         [Required(ErrorMessage = "Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Email inválido")]

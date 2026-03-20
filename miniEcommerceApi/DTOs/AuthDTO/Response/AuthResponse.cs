@@ -1,4 +1,4 @@
-﻿namespace miniEcommerceApi.DTOs.CostumersDTO.Response
+﻿namespace miniEcommerceApi.DTOs.CustomersDTO.Response
 {
     public class AuthResponse
     {

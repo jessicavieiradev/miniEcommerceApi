@@ -1,6 +1,6 @@
-﻿namespace miniEcommerceApi.DTOs.CostumersDTO.Response
+﻿namespace miniEcommerceApi.DTOs.CustomersDTO.Response
 {
-    public class CostumerResponse
+    public class CustomerResponse
     {
         public Guid Id { get; set; }
         public string Nome { get; set; }

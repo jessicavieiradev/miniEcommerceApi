@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace miniEcommerceApi.DTOs.CostumersDTO.Request
+namespace miniEcommerceApi.DTOs.CustomersDTO.Request
 {
-    public class UpdateCostumerRequest
+    public class UpdateCustomerRequest
     {
         [EmailAddress(ErrorMessage = "Email inválido")]
         public string? Email { get; set; }
