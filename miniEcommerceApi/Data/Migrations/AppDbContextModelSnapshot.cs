@@ -153,7 +153,7 @@ namespace miniEcommerceApi.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("miniEcommerceApi.Models.Adresses", b =>
+            modelBuilder.Entity("miniEcommerceApi.Models.Addresses", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,10 +164,10 @@ namespace miniEcommerceApi.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid>("CostumerId")
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Neiborhood")
+                    b.Property<string>("Neighborhood")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -194,9 +194,9 @@ namespace miniEcommerceApi.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CostumerId");
+                    b.HasIndex("CustomerId");
 
-                    b.ToTable("Adresses", (string)null);
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("miniEcommerceApi.Models.Categories", b =>
@@ -218,7 +218,7 @@ namespace miniEcommerceApi.Data.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
-            modelBuilder.Entity("miniEcommerceApi.Models.Costumers", b =>
+            modelBuilder.Entity("miniEcommerceApi.Models.Customers", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -252,7 +252,7 @@ namespace miniEcommerceApi.Data.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Costumers", (string)null);
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("miniEcommerceApi.Models.OrderItem", b =>
@@ -346,6 +346,36 @@ namespace miniEcommerceApi.Data.Migrations
                     b.ToTable("Orders", (string)null);
                 });
 
+            modelBuilder.Entity("miniEcommerceApi.Models.Payments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Payments", (string)null);
+                });
+
             modelBuilder.Entity("miniEcommerceApi.Models.Products", b =>
                 {
                     b.Property<Guid>("Id")
@@ -369,6 +399,9 @@ namespace miniEcommerceApi.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -511,22 +544,22 @@ namespace miniEcommerceApi.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("miniEcommerceApi.Models.Adresses", b =>
+            modelBuilder.Entity("miniEcommerceApi.Models.Addresses", b =>
                 {
-                    b.HasOne("miniEcommerceApi.Models.Costumers", "Costumer")
+                    b.HasOne("miniEcommerceApi.Models.Customers", "Customer")
                         .WithMany()
-                        .HasForeignKey("CostumerId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Costumer");
+                    b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("miniEcommerceApi.Models.Costumers", b =>
+            modelBuilder.Entity("miniEcommerceApi.Models.Customers", b =>
                 {
                     b.HasOne("miniEcommerceApi.Models.Users", "User")
                         .WithOne()
-                        .HasForeignKey("miniEcommerceApi.Models.Costumers", "UserId")
+                        .HasForeignKey("miniEcommerceApi.Models.Customers", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -536,7 +569,7 @@ namespace miniEcommerceApi.Data.Migrations
             modelBuilder.Entity("miniEcommerceApi.Models.OrderItem", b =>
                 {
                     b.HasOne("miniEcommerceApi.Models.Orders", "Order")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -554,13 +587,24 @@ namespace miniEcommerceApi.Data.Migrations
 
             modelBuilder.Entity("miniEcommerceApi.Models.Orders", b =>
                 {
-                    b.HasOne("miniEcommerceApi.Models.Costumers", "Customer")
+                    b.HasOne("miniEcommerceApi.Models.Customers", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("miniEcommerceApi.Models.Payments", b =>
+                {
+                    b.HasOne("miniEcommerceApi.Models.Orders", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("miniEcommerceApi.Models.Products", b =>
@@ -572,6 +616,11 @@ namespace miniEcommerceApi.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("miniEcommerceApi.Models.Orders", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using miniEcommerceApi.Data;
 namespace miniEcommerceApi.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260316184859_AuthIdentityImp")]
-    partial class AuthIdentityImp
+    [Migration("20260319215902_AddPaymentsEntity")]
+    partial class AddPaymentsEntity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -349,6 +349,36 @@ namespace miniEcommerceApi.Data.Migrations
                     b.ToTable("Orders", (string)null);
                 });
 
+            modelBuilder.Entity("miniEcommerceApi.Models.Payments", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<int>("Method")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Payments", (string)null);
+                });
+
             modelBuilder.Entity("miniEcommerceApi.Models.Products", b =>
                 {
                     b.Property<Guid>("Id")
@@ -372,6 +402,9 @@ namespace miniEcommerceApi.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -539,7 +572,7 @@ namespace miniEcommerceApi.Data.Migrations
             modelBuilder.Entity("miniEcommerceApi.Models.OrderItem", b =>
                 {
                     b.HasOne("miniEcommerceApi.Models.Orders", "Order")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -566,6 +599,17 @@ namespace miniEcommerceApi.Data.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("miniEcommerceApi.Models.Payments", b =>
+                {
+                    b.HasOne("miniEcommerceApi.Models.Orders", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("miniEcommerceApi.Models.Products", b =>
                 {
                     b.HasOne("miniEcommerceApi.Models.Categories", "Category")
@@ -575,6 +619,11 @@ namespace miniEcommerceApi.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("miniEcommerceApi.Models.Orders", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

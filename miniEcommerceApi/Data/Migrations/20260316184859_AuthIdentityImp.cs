@@ -13,7 +13,7 @@ namespace miniEcommerceApi.Data.Migrations
         {
             migrationBuilder.AddColumn<Guid>(
                 name: "UserId",
-                table: "Costumers",
+                table: "Customers",
                 type: "uniqueidentifier",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
@@ -166,8 +166,8 @@ namespace miniEcommerceApi.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Costumers_UserId",
-                table: "Costumers",
+                name: "IX_Customers_UserId",
+                table: "Customers",
                 column: "UserId",
                 unique: true);
 
@@ -211,8 +211,8 @@ namespace miniEcommerceApi.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Costumers_Users_UserId",
-                table: "Costumers",
+                name: "FK_Customers_Users_UserId",
+                table: "Customers",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "Id",
@@ -223,8 +223,8 @@ namespace miniEcommerceApi.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Costumers_Users_UserId",
-                table: "Costumers");
+                name: "FK_Customers_Users_UserId",
+                table: "Customers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -248,12 +248,12 @@ namespace miniEcommerceApi.Data.Migrations
                 name: "Users");
 
             migrationBuilder.DropIndex(
-                name: "IX_Costumers_UserId",
-                table: "Costumers");
+                name: "IX_Customers_UserId",
+                table: "Customers");
 
             migrationBuilder.DropColumn(
                 name: "UserId",
-                table: "Costumers");
+                table: "Customers");
         }
     }
 }

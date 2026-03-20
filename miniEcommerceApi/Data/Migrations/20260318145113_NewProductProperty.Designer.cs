@@ -12,8 +12,8 @@ using miniEcommerceApi.Data;
 namespace miniEcommerceApi.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260316184859_AuthIdentityImp")]
-    partial class AuthIdentityImp
+    [Migration("20260318145113_NewProductProperty")]
+    partial class NewProductProperty
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -373,6 +373,9 @@ namespace miniEcommerceApi.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -539,7 +542,7 @@ namespace miniEcommerceApi.Data.Migrations
             modelBuilder.Entity("miniEcommerceApi.Models.OrderItem", b =>
                 {
                     b.HasOne("miniEcommerceApi.Models.Orders", "Order")
-                        .WithMany()
+                        .WithMany("Items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -575,6 +578,11 @@ namespace miniEcommerceApi.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("miniEcommerceApi.Models.Orders", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
