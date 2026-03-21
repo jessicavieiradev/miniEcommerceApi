@@ -19,12 +19,12 @@ namespace miniEcommerceApi.DTOs.OrdersDTO.Request
 
         public CreateOrderRequest(
             Guid customerId,
-            Guid AddressId,
+            Guid addressId,
             string? notes,
             List<CreateOrderItemRequest> items)
         {
             CustomerId = customerId;
-            AddressId = AddressId;
+            AddressId = addressId;
             Notes = notes;
             Items = items;
         }
