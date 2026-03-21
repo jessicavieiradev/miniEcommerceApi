@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/miniEcommerceApi.Tests/">
+    <Project Path="miniEcommerceApi.Tests/miniEcommerceApi.Tests/miniEcommerceApi.Tests.csproj" />
+  </Folder>
+  <Folder Name="/miniEcommerceApi/">
+    <Project Path="miniEcommerceApi/miniEcommerceApi/miniEcommerceApi.csproj" />
+  </Folder>
+</Solution>
