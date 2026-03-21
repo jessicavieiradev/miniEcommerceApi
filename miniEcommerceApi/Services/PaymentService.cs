@@ -37,7 +37,7 @@ namespace miniEcommerceApi.Services
         public async Task<PaymentResponse> ProcessPayment(CreatePaymentRequest dto)
         {
             var order = await _context.Orders
-       .FirstOrDefaultAsync(o => o.Id == dto.OrderId);
+                .FirstOrDefaultAsync(o => o.Id == dto.OrderId);
 
             if (order == null)
                 throw new KeyNotFoundException("Order not found");
@@ -45,7 +45,7 @@ namespace miniEcommerceApi.Services
             if (order.Status != OrderStatus.Pending)
                 throw new InvalidOperationException("Order is not pending");
 
-            var approved = new Random().Next(0, 10) > 1; // 80% de aprovação
+            var approved = new Random().Next(0, 10) > 1;
 
             var payment = new Payments(
                 dto.OrderId,
