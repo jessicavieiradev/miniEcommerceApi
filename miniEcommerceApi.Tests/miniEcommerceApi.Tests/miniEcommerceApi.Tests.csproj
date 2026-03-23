@@ -26,11 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\..\miniEcommerceApi\miniEcommerceApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\miniEcommerceApi\miniEcommerceApi\miniEcommerceApi.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
