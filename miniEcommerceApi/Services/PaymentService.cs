@@ -11,11 +11,14 @@ namespace miniEcommerceApi.Services
     public class PaymentService : IPaymentService
     {
         private readonly AppDbContext _context;
+        private readonly IRandomPaymentApproval _approval;
 
-        public PaymentService(AppDbContext context)
+        public PaymentService(AppDbContext context, IRandomPaymentApproval approval)
         {
             _context = context;
+            _approval = approval;
         }
+
         public async Task<PaymentResponse> GetPaymentByOrderId(Guid orderId)
         {
             var payment = await _context.Payments.FirstOrDefaultAsync(p => p.OrderId == orderId);
@@ -45,7 +48,7 @@ namespace miniEcommerceApi.Services
             if (order.Status != OrderStatus.Pending)
                 throw new InvalidOperationException("Order is not pending");
 
-            var approved = new Random().Next(0, 10) > 1;
+            var approved = _approval.IsApproved();
 
             var payment = new Payments(
                 dto.OrderId,

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using miniEcommerceApi.Data;
 using miniEcommerceApi.Data.Seeders;
+using miniEcommerceApi.Helpers;
 using miniEcommerceApi.Interfaces;
 using miniEcommerceApi.Models;
 using miniEcommerceApi.Services;
@@ -102,6 +103,8 @@ builder.Services.AddScoped<IProductsService, ProductService>();
 builder.Services.AddScoped<IAddressesService, AddressesService>();
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Services.AddScoped<IRandomPaymentApproval, RandomPaymentApproval>();
 
 
 builder.Services.AddControllers();
