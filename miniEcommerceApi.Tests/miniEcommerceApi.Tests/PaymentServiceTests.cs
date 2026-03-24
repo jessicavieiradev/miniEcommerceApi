@@ -253,7 +253,7 @@ namespace miniEcommerceApi.Tests
             var exception = await Assert.ThrowsAsync<InvalidOperationException>(
                 () => service.ProcessPayment(dto)
             );
-            exception.Message.Should().Be($"Insufficient stock for product {item.Product.Name}");
+            exception.Message.Should().Be($"Insufficient stock for product {product.Name}");
         }
 
         // - stock is exactly the quantity, payment is approved, reduces stock to 0
