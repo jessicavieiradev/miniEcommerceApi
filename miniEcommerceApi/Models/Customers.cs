@@ -3,8 +3,8 @@
     public class Customers
     {
         public Guid Id { get; set; }
-        public Guid UserId { get; set; } 
-        public Users User { get; set; } 
+        public Guid UserId { get; set; }
+        public Users User { get; set; } = null!;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
