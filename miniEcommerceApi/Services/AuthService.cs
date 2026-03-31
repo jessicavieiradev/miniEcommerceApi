@@ -38,8 +38,8 @@ namespace miniEcommerceApi.Services
                 LastName = c.LastName,
                 Cpf = c.Cpf,
                 Phone = c.Phone,
-                Email = c.User.Email,
-                Username = c.User.UserName
+                Email = c.User.Email ?? string.Empty,
+                Username = c.User.UserName ?? string.Empty
             });
         }
         public async Task<CustomerResponse> GetCustomerById(Guid id)
@@ -56,8 +56,8 @@ namespace miniEcommerceApi.Services
                 LastName = Customer.LastName,
                 Cpf = Customer.Cpf,
                 Phone = Customer.Phone,
-                Email = Customer.User.Email,
-                Username = Customer.User.UserName
+                Email = Customer.User.Email ?? string.Empty,
+                Username = Customer.User.UserName ?? string.Empty
             };
         }
         public async Task<AuthResponse> CreateCustomer(CreateCustomerRequest dto)
@@ -145,13 +145,13 @@ namespace miniEcommerceApi.Services
         }
         public async Task<AuthResponse> LoginUser(LoginRequestDTO dto)
         {
-            var existingUser= await _userManager.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var existingUser= await _userManager.FindByEmailAsync(dto.Email);
             if(existingUser == null)
             {
                 throw new InvalidOperationException("Invalid credentials");
             }
             if (!existingUser.IsActive)
-                throw new InvalidOperationException("User is inactive");
+                throw new InvalidOperationException("Invalid credentials");
             var passwordValid = await _userManager.CheckPasswordAsync(existingUser, dto.Password);
             if (!passwordValid)
                 throw new InvalidOperationException("Invalid credentials");
@@ -160,9 +160,9 @@ namespace miniEcommerceApi.Services
 
             return new AuthResponse
             {
-                Token = await _tokenService.GenerateToken(existingUser, existingUser.UserName),
-                Name = Customer.FirstName ?? existingUser.UserName,
-                Email = existingUser.Email
+                Token = await _tokenService.GenerateToken(existingUser, existingUser.UserName ?? string.Empty),
+                Name = Customer?.FirstName ?? existingUser.UserName ?? string.Empty,
+                Email = existingUser.Email ?? string.Empty
             };
 
         }
