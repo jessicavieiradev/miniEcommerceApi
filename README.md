@@ -1,4 +1,4 @@
-# MiniEcommerce
+# Mini Ecommerce
 
 API REST desenvolvida como projeto de portfólio para demonstrar conhecimentos em desenvolvimento backend com ASP.NET Core 8.
 
