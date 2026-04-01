@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-# miniEcommerceApi
-
-## Description
-o q faz
-com o q foi construido
-pq foi construido
-
-## Instalation instructions
-
-### pre requisitos
-
-...
-
-### etapas
-
-blocos de codigo ```bach
-npm intall
-```
-```
-
-## How to use
-
-## Licence
-=======
 # MiniEcommerce API
 
 REST API developed as a portfolio project to demonstrate backend development skills with ASP.NET Core 8.
@@ -125,4 +100,3 @@ The database is created, migrations are applied, and the admin user is seeded au
 ```
 http://localhost:5000/swagger
 ```
->>>>>>> 484e4d8bba9cabd5ecd247fdc831dd9d7a1ee3ef
