@@ -20,7 +20,7 @@ services:
     api:
         image: miniecommerceapi:dev
         build:
-            context: ./miniEcommerceApi
+            context: .
             dockerfile: miniEcommerceApi/Dockerfile
         container_name: miniecommerceapi
         ports:
